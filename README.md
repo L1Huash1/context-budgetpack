@@ -11,10 +11,26 @@ A small local context preparation tool for agent developers. Python 3.10+, zero 
 ```sh
 git clone https://github.com/L1Huash1/context-budgetpack.git
 cd context-budgetpack
-python -m pip install .
-context-budgetpack pack examples/plan.json --root examples/workspace --max-bytes 1000 --output demo-bundle
-context-budgetpack verify demo-bundle --root examples/workspace
+python -m venv .venv
 ```
+
+**Windows PowerShell** — use the environment's programs directly; activation and script-policy changes are unnecessary:
+
+```powershell
+.venv\Scripts\python.exe -m pip install .
+.venv\Scripts\context-budgetpack.exe pack examples/plan.json --root examples/workspace --max-bytes 1000 --output demo-bundle
+.venv\Scripts\context-budgetpack.exe verify demo-bundle --root examples/workspace
+```
+
+**macOS / Linux**:
+
+```sh
+.venv/bin/python -m pip install .
+.venv/bin/context-budgetpack pack examples/plan.json --root examples/workspace --max-bytes 1000 --output demo-bundle
+.venv/bin/context-budgetpack verify demo-bundle --root examples/workspace
+```
+
+As an alternative module entry point, replace `.venv\Scripts\context-budgetpack.exe` with `.venv\Scripts\python.exe -m context_budgetpack` on Windows, or `.venv/bin/context-budgetpack` with `.venv/bin/python -m context_budgetpack` on macOS/Linux, keeping the same arguments. For example, `.venv\Scripts\python.exe -m context_budgetpack --help` shows usage without depending on the command being on `PATH`. Installation may download the `setuptools` build tool; packing and verification run locally.
 
 Open `demo-bundle/report.html` in a browser to review selected and excluded fragments. `context.md` contains the selected material; `manifest.json` records source hashes, line ranges and decisions. Choose a new output directory when repeating the example: existing output paths are refused.
 
@@ -42,8 +58,16 @@ LF defines physical lines; CRLF is normalized to LF in context fragments. The co
 
 ## Verify later
 
+Windows PowerShell:
+
+```powershell
+.venv\Scripts\python.exe -m context_budgetpack verify demo-bundle --root examples/workspace --format json
+```
+
+macOS / Linux:
+
 ```sh
-context-budgetpack verify demo-bundle --root examples/workspace --format json
+.venv/bin/python -m context_budgetpack verify demo-bundle --root examples/workspace --format json
 ```
 
 Verification checks the recorded source hashes, context and HTML artifact bytes, and the selected context reconstructed from unchanged sources. A changed source or artifact returns **1**; malformed input or file errors return **2**. The manifest is local metadata, not a signed trust anchor. Simultaneously editing metadata and artifacts can create a self-consistent bundle; this is not tamper-proof storage.
