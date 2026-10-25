@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "files": [
+    {"path": "README.md", "priority": 100},
+    {"path": "src/cart.py", "priority": 90, "start_line": 1, "end_line": 10},
+    {"path": "tests/test_cart.py", "priority": 40},
+    {"path": "docs/design-notes.md", "priority": 10},
+    {"path": ".env", "priority": 200}
+  ]
+}
