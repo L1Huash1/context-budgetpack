@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "context-budgetpack"
+version = "0.1.0"
+description = "Explicit, byte-budgeted context bundles with source hashes and exclusion reasons"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [{name = "L1Huash1"}]
+keywords = ["agents", "context", "developer-tools", "reproducibility"]
+
+[project.scripts]
+context-budgetpack = "context_budgetpack.cli:main"
+
+[project.urls]
+Repository = "https://github.com/L1Huash1/context-budgetpack"
+Issues = "https://github.com/L1Huash1/context-budgetpack/issues"
+
+[tool.setuptools.packages.find]
+where = ["src"]

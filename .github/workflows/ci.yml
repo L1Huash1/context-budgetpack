@@ -1,0 +1,31 @@
+name: Tests
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        python: ['3.10', '3.13']
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/setup-python@v7.1.0
+        with:
+          python-version: ${{ matrix.python }}
+      - run: python -m pip install .
+      - run: python -m unittest discover -s tests -v
+      - run: context-budgetpack pack examples/plan.json --root examples/workspace --max-bytes 1000 --output demo-bundle
+      - run: context-budgetpack verify demo-bundle --root examples/workspace --format json
+      - uses: actions/upload-artifact@v7.0.2
+        with:
+          name: context-budgetpack-demo-${{ matrix.os }}-py${{ matrix.python }}
+          path: demo-bundle/
+          if-no-files-found: error
+          retention-days: 7
