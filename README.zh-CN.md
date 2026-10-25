@@ -13,10 +13,26 @@
 ```sh
 git clone https://github.com/L1Huash1/context-budgetpack.git
 cd context-budgetpack
-python -m pip install .
-context-budgetpack pack examples/plan.json --root examples/workspace --max-bytes 1000 --output demo-bundle
-context-budgetpack verify demo-bundle --root examples/workspace
+python -m venv .venv
 ```
+
+**Windows PowerShell**：直接使用环境内程序，不必激活环境或调整脚本执行权限。
+
+```powershell
+.venv\Scripts\python.exe -m pip install .
+.venv\Scripts\context-budgetpack.exe pack examples/plan.json --root examples/workspace --max-bytes 1000 --output demo-bundle
+.venv\Scripts\context-budgetpack.exe verify demo-bundle --root examples/workspace
+```
+
+**macOS / Linux**：
+
+```sh
+.venv/bin/python -m pip install .
+.venv/bin/context-budgetpack pack examples/plan.json --root examples/workspace --max-bytes 1000 --output demo-bundle
+.venv/bin/context-budgetpack verify demo-bundle --root examples/workspace
+```
+
+也可以使用模块入口：Windows 将 `.venv\Scripts\context-budgetpack.exe` 换成 `.venv\Scripts\python.exe -m context_budgetpack`，macOS / Linux 将 `.venv/bin/context-budgetpack` 换成 `.venv/bin/python -m context_budgetpack`，后面的参数保持不变。例如 `.venv\Scripts\python.exe -m context_budgetpack --help` 可查看用法，不依赖命令是否已加入 `PATH`。安装时可能下载 `setuptools` 构建工具；打包和核验本身在本地运行。
 
 打开 `demo-bundle/report.html` 看选择明细。`context.md` 是整理后的上下文，`manifest.json` 保存完整源文件哈希、行范围和取舍理由。重复体验时请换一个输出目录；已有路径不会被覆盖。
 
@@ -44,8 +60,16 @@ context-budgetpack verify demo-bundle --root examples/workspace
 
 ## 后续核验
 
+Windows PowerShell：
+
+```powershell
+.venv\Scripts\python.exe -m context_budgetpack verify demo-bundle --root examples/workspace --format json
+```
+
+macOS / Linux：
+
 ```sh
-context-budgetpack verify demo-bundle --root examples/workspace --format json
+.venv/bin/python -m context_budgetpack verify demo-bundle --root examples/workspace --format json
 ```
 
 源文件或产物变化返回 **1**，输入格式或文件操作错误返回 **2**，通过返回 **0**。核验检查已记录的源哈希、上下文、HTML 产物和选中片段的一致性。清单不是数字签名：同时修改清单与产物，仍可能构造出自洽的结果。未读取的排除项没有源哈希，工具会明确报告数量。
